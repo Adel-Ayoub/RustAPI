@@ -1,0 +1,27 @@
+services:
+  rustapi:
+    container_name: rustapi
+    image: adelayoub/rustapi:1.0.0
+    build:
+      context: ./server
+      dockerfile: rust.dockerfile
+      args:
+        DATABASE_URL: postgres://adel:adel123@database:5432/rustapidb
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+  database:
+    container_name: database
+    image: postgres:13
+    environment:
+      POSTGRES_USER: adel
+      POSTGRES_PASSWORD: adel123
+      POSTGRES_DB: rustapidb
+    ports:
+      - 5433:5432
+    volumes:
+      - rustapi_data:/var/lib/postgresql/data
+
+volumes:
+  rustapi_data: {}
